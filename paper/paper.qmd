@@ -54,22 +54,11 @@ date: The date of the expense is set to be the last day of 2023.
 
 Table 1 (@tbl-summary) is the summary statistics of the analysis data. It provides a summary of the total, mean, median, and standard deviation of amounts for each feature category. 
 
-```{r}
-#| echo: false
-#| label: tbl-summary
-#| tbl-cap: "Summary Statstics of Data"
-#| warning: false
+Figuer 1 (@fig-command) provides a clear visual representation of the total expenses allocated to various commands within TPS. This chart effectively highlights the differences in the allocation of financial resources between commands. The vertical axis, labeled "Total Amount", indicating the total amount of money spent. The horizontal axis lists 9 different commands to help identify commands with the highest and lowest expenses, providing insights of spending patterns. The Community Safety Command is way ahead of the rest commands with the highest amount of budget. This suggests that the Community Safety Command requires much more financial resources compared to others. The Centralized Service Charges and Specialized Operation Command also have relatively higher expenses, while the remaining commands have similar and lower expense values. 
 
-summary_stats <- data %>%
-  group_by(feature_category) %>%
-  summarise(
-    total_amount = sum(amount),
-    mean_amount = mean(amount),
-    median_amount = median(amount),
-    sd_amount = sd(amount)
-  )
-print(summary_stats)
-```
+Figure 2 (@fig-category) provides provides a clear visual representation of how expenses are distributed across 6 different categories except for the Revenues. The largest section, colored in red, represents 65.9% of the total expenses, indicating that the Salaries consumes the majority of the budget. The next significant portion is the Benefits, accounting for 19.1% of the expenses. Smaller sections include the Services at 8.1%, the Premium Pay at 4.4%, and two very small sections that are less than 4.4% each. This plot helps visualize the proportion of expenses allocated to each category, highlighting the major areas of spending.
+
+Combining Figure 1 (@fig-command) and 2 (@fig-category), a significant portion of the expenses within the Chief of Police command may be attributed to personnel-related costs.
 
 ```{r}
 #| label: fig-command
@@ -88,8 +77,6 @@ ggplot(total_expenses_by_command, aes(x = total_amount, y = command_name)) +
   labs(title = "Total Expenses by Command", x = "Total Amount", y = "Command Name") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
-
-Figuer 1 (@fig-command) provides a clear visual representation of the total expenses allocated to various commands within TPS. This chart effectively highlights the differences in the allocation of financial resources between commands. The vertical axis, labeled "Total Amount", indicating the total amount of money spent. The horizontal axis lists 9 different commands to help identify commands with the highest and lowest expenses, providing insights of spending patterns. The Community Safety Command is way ahead of the rest commands with the highest amount of budget. This suggests that the Community Safety Command requires much more financial resources compared to others. The Centralized Service Charges and Specialized Operation Command also have relatively higher expenses, while the remaining commands have similar and lower expense values. 
 
 ```{r}
 #| label: fig-category
@@ -112,9 +99,22 @@ ggplot(total_expenses_by_category, aes(x = "", y = total_amount, fill = feature_
             position = position_stack(vjust = 0.5))
 ```
 
-Figure 2 (@fig-category) provides provides a clear visual representation of how expenses are distributed across 6 different categories except for the Revenues. The largest section, colored in red, represents 65.9% of the total expenses, indicating that the Salaries consumes the majority of the budget. The next significant portion is the Benefits, accounting for 19.1% of the expenses. Smaller sections include the Services at 8.1%, the Premium Pay at 4.4%, and two very small sections that are less than 4.4% each. This plot helps visualize the proportion of expenses allocated to each category, highlighting the major areas of spending.
+```{r}
+#| echo: false
+#| label: tbl-summary
+#| tbl-cap: "Summary Statstics of Data"
+#| warning: false
 
-Combining Figure 1 (@fig-command) and 2 (@fig-category), a significant portion of the expenses within the Chief of Police command may be attributed to personnel-related costs.
+summary_stats <- data %>%
+  group_by(feature_category) %>%
+  summarise(
+    total_amount = sum(amount),
+    mean_amount = mean(amount),
+    median_amount = median(amount),
+    sd_amount = sd(amount)
+  )
+print(summary_stats)
+```
 
 \clearpage
 
