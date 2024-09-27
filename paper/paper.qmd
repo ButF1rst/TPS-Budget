@@ -36,6 +36,7 @@ In this analysis, we use @citeR to analyze data and plot graphs. The data used i
 In @sec-data, we begin with an overview of the dataset and the methodology used for analysis. This is followed by a breakdown of the budget categories, highlighting key findings and trends. 
 
 
+\newpage
 # Data {#sec-data}
 
 ## Overview
@@ -50,11 +51,11 @@ amount: The monetary value of the expense, which is the most essential for the a
 date: The date of the expense is set to be the last day of 2023.
 
 ## Visualization
+
 Table 1 (@tbl-summary) is the summary statistics of the analysis data. It provides a summary of the total, mean, median, and standard deviation of amounts for each feature category. 
 
 ```{r}
 #| echo: false
-#| eval: true
 #| label: tbl-summary
 #| tbl-cap: "Summary Statstics of Data"
 #| warning: false
@@ -69,8 +70,6 @@ summary_stats <- data %>%
   )
 print(summary_stats)
 ```
-
-Figuer 1 (@fig-command) shows the total expenses for each command. This plot helps identify which commands have the highest and lowest expenses. Community safety command is way ahead of the rest with the highest amount of budget in 2023. It shows that TPS considered community safety in the first place. 
 
 ```{r}
 #| label: fig-command
@@ -90,9 +89,7 @@ ggplot(total_expenses_by_command, aes(x = total_amount, y = command_name)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-
-
-Total expenses by category (@fig-category).
+Figuer 1 (@fig-command) provides a clear visual representation of the total expenses allocated to various commands within TPS. This chart effectively highlights the differences in the allocation of financial resources between commands. The vertical axis, labeled "Total Amount", indicating the total amount of money spent. The horizontal axis lists 9 different commands to help identify commands with the highest and lowest expenses, providing insights of spending patterns. The Community Safety Command is way ahead of the rest commands with the highest amount of budget. This suggests that the Community Safety Command requires much more financial resources compared to others. The Centralized Service Charges and Specialized Operation Command also have relatively higher expenses, while the remaining commands have similar and lower expense values. 
 
 ```{r}
 #| label: fig-category
@@ -115,110 +112,13 @@ ggplot(total_expenses_by_category, aes(x = "", y = total_amount, fill = feature_
             position = position_stack(vjust = 0.5))
 ```
 
+Figure 2 (@fig-category) provides provides a clear visual representation of how expenses are distributed across 6 different categories except for the Revenues. The largest section, colored in red, represents 65.9% of the total expenses, indicating that the Salaries consumes the majority of the budget. The next significant portion is the Benefits, accounting for 19.1% of the expenses. Smaller sections include the Services at 8.1%, the Premium Pay at 4.4%, and two very small sections that are less than 4.4% each. This plot helps visualize the proportion of expenses allocated to each category, highlighting the major areas of spending.
 
-# Results
+Combining Figure 1 (@fig-command) and 2 (@fig-category), a significant portion of the expenses within the Chief of Police command may be attributed to personnel-related costs.
 
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
-
-
-# Discussion
-
-## First discussion point {#sec-first-point}
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
+\clearpage
 
 \newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
-
-
-\newpage
-
 
 # References
 
