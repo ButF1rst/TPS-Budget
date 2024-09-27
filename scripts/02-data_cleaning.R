@@ -14,15 +14,15 @@ library(tidyverse)
 
 #### Clean data ####
 # Read raw data
-raw_data <- read_csv("data/raw_data/raw_data.csv")
+raw_data <- read_csv("TPS-Budget/data/raw_data/raw_data.csv")
 
 # Clean data, standardize column names, create new column date, remove unwanted columns
 cleaned_data <-
   raw_data |>
   janitor::clean_names() |> 
   mutate(date = lubridate::ymd(paste(fiscal_year, "12", "31", sep = "-"))) |>
-  select(-fiscal_year, -budget_type, -command_name, -pillar_name, -district_name, -unit_name, -cost_element)
+  select(-fiscal_year, -budget_type, -organization_entity, -district_name, -pillar_name, -unit_name, -cost_element)
 
 
 #### Save data ####
-write_csv(cleaned_data, "data/analysis_data/analysis_data.csv")
+write_csv(cleaned_data, "TPS-Budget/data/analysis_data/analysis_data.csv")

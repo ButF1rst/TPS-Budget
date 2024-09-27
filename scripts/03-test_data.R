@@ -14,7 +14,7 @@ library(tidyverse)
 
 #### Test data ####
 # Read simulated data
-data <- read_csv("data/raw_data/simulated.csv")
+data <- read_csv("TPS-Budget/data/raw_data/simulated.csv")
 
 # Test for negative numbers
 data$number_of_budget |> min() <= 0

@@ -5,7 +5,7 @@ author:
 thanks: "Code and data supporting this analysis is available at: https://github.com/ButF1rst/TPS-Budget."
 date: 2024-09-27
 date-format: long
-abstract: "This dataset includes a line-by-line breakdown of the Toronto Police Service’s approved budget at a Service-wide level in 2023. It details how funds are allocated across various organizations within the TPS. The analysis reveals a significant investment in personnel costs and operating expenses, highlighting the financial priorities of the police department. The findings provide insights into the financial planning and resource allocation strategies of the TPS, which are important for ensuring effective community safety."
+abstract: "This dataset includes a line-by-line breakdown of the Toronto Police Service’s approved budget at a Service-wide level in 2023. It details how funds are allocated across various commands within the TPS. The analysis reveals a significant investment in personnel costs and operating expenses, highlighting the financial priorities of the police department. The findings provide insights into the financial planning and resource allocation strategies of the TPS, which are important for ensuring effective community safety."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -25,88 +25,95 @@ data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 # Introduction
 
-In recent years, public scrutiny of police budgets has increased, driven by demands for greater transparency and accountability in the use of public funds. Effective financial management is essential for public safety organizations to ensure that they achieve their operational goals and serve their communities efficiently. The Toronto Police Service (TPS), as one of the largest municipal police forces in Canada, plays a critical role in maintaining public safety and order. Its budget reflects the complexity and scope of its operations. However, the allocation of its large budget is often the subject of debate among policymakers, community leaders, and the public. This paper provides a comprehensive analysis of the 2023 approved budget for the TPS, with a detailed breakdown of expenditures by organizations, categories, and cost elements.
+In recent years, public scrutiny of police budgets has increased, driven by demands for greater transparency and accountability in the use of public funds. Effective financial management is essential for public safety unit to ensure that they achieve their operational goals and serve their communities efficiently. The Toronto Police Service (TPS), as one of the largest municipal police forces in Canada, plays a critical role in maintaining public safety and order. Its budget reflects the complexity and scope of its operations. However, the allocation of its large budget is often the subject of debate among policymakers, community leaders, and the public. This paper provides a comprehensive analysis of the 2023 approved budget for the TPS, with a detailed breakdown of expenditures by commands, categories, and cost elements.
 
-The TPS budget is categorized into several key areas, including salaries, benefits, materials, services, and equipment. Each category is further divided to reflect the specific needs and priorities of different departments within the TPS. An important gap in the current discussion is the lack of detailed, accessible information on police budget structures and expenditures. The analysis addresses the gap by breaking down the budget into various components to provide a transparent view of where and how resources are allocated. By examining these allocations, we aim to provide a clear picture of financial priorities and operational strategies of the TPS and how these translate into operational effectiveness and community safety outcomes.
+An important gap in the current discussion is the lack of detailed, accessible information on police budget structures and expenditures. The analysis addresses the gap by breaking down the budget into various components to provide a transparent view of where and how resources are allocated. By examining these allocations, we aim to provide a clear picture of financial priorities and operational strategies of the TPS and how these translate into operational effectiveness and community safety outcomes. The findings reveal that a substantial portion of the budget is dedicated to personnel costs, including regular salaries, premium pay, and benefits. Additionally, significant investments are made in operational expenses such as materials, equipments, and services required for daily operations.
 
+The importance of this analysis lies in its ability to inform stakeholders, policymakers, and the public about the financial priorities of the TPS. It enhances public understanding and facilitated informed discussions on police funding and resource management. It provides a basis for assessing the efficiency and effectiveness of TPS in discharging its responsibilities. It helps to ensure that public funds are used responsibly and in ways that align with community needs and expectations.
 
+In this analysis, we use @citeR to analyze data and plot graphs. The data used is from @opendatatoronto. @alexander2023telling provides necessary process and techniques of analyzing and visualizing data. The structure of the analysis and documents use the starter folder of @rohan as a reference. 
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @opendatatoronto.
-
-The remainder of this paper is structured as follows. @sec-data
-
+In @sec-data, we begin with an overview of the dataset and the methodology used for analysis. This is followed by a breakdown of the budget categories, highlighting key findings and trends. 
 
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+## Overview
+The fundamental dataset used for this paper is TPS Budget 2023 from @opendatatoronto. We selected year 2023 from all dataset among year 2020 to year 2024 because 2023 has the most recent and comprehensive data. We first clean the data and remove several unwanted variables. The data used for the analysis is analysis_data. This dataset represents the financial transactions of TPS in 2023, given the detailed breakdown of expenses across various commands and categories. The data includes salaries, benefits, materials, supplies, equipment, services, and revenues, providing a comprehensive view of the organization’s financial activities.
+
+## Variables
+x_id: A unique identifier for each observation.
+command_name: This variable categorizes expenses by different commands, such as "Corporate Communications", "Disciplinary Hearing Office", "Centralized Service Charges", and etc.
+feature_category: This variable categorizes expenses into broader 7 types: "Salaries", "Premium Pay", "Benefits", "Materials & Supplies", "Equipment", "Services", and "Revenues".
+cost_element_long_name: Provides a detailed description of the expense, such as "Regular salaries - Civilian A", "Books & Magazines", "Consulting - Creative communication", and etc.
+amount: The monetary value of the expense, which is the most essential for the analysis.
+date: The date of the expense is set to be the last day of 2023.
+
+## Visualization
+Table 1 (@tbl-summary) is the summary statistics of the analysis data. It provides a summary of the total, mean, median, and standard deviation of amounts for each feature category. 
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
 #| echo: false
+#| eval: true
+#| label: tbl-summary
+#| tbl-cap: "Summary Statstics of Data"
+#| warning: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+summary_stats <- data %>%
+  group_by(feature_category) %>%
+  summarise(
+    total_amount = sum(amount),
+    mean_amount = mean(amount),
+    median_amount = median(amount),
+    sd_amount = sd(amount)
+  )
+print(summary_stats)
 ```
 
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+Figuer 1 (@fig-command) shows the total expenses for each command. This plot helps identify which commands have the highest and lowest expenses. Community safety command is way ahead of the rest with the highest amount of budget in 2023. It shows that TPS considered community safety in the first place. 
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-command
+#| fig-cap: Total Expenses by Command
 #| echo: false
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+total_expenses_by_command <- data %>%
+  group_by(command_name) %>%
+  summarise(total_amount = sum(amount))
 
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+ggplot(total_expenses_by_command, aes(x = total_amount, y = command_name)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Total Expenses by Command", x = "Total Amount", y = "Command Name") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-Talk way more about it. 
 
 
+Total expenses by category (@fig-category).
 
-# Model
+```{r}
+#| label: fig-category
+#| fig-cap: Total Expenses by Category
+#| echo: false
+#| warning: false
+#| message: false
 
-The goal of our modelling strategy is twofold. Firstly,...
+total_expenses_by_category <- data %>%
+  filter(feature_category != "7-Revenues") %>%
+  group_by(feature_category) %>%
+  summarise(total_amount = sum(amount))
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
+ggplot(total_expenses_by_category, aes(x = "", y = total_amount, fill = feature_category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  labs(title = "Expense Distribution by Category", x = "", y = "") +
+  theme(axis.text.x = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank()) +
+  geom_text(aes(label = paste0(round(total_amount / sum(total_amount) * 100, 1), "%")), 
+            position = position_stack(vjust = 0.5))
+```
 
 
 # Results
@@ -185,15 +192,6 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
 ```
 
 ## Diagnostics
